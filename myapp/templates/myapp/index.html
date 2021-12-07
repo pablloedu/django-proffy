@@ -1,0 +1,44 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt_br">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Proffy | Encontre Professoress</title>
+        <link href="{% static '/styles/main.css' %}" rel="stylesheet">
+        <link href="{% static '/styles/partials/page-landing.css' %}" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700&amp;family=Poppins:wght@400;600&amp;display=swap" rel="stylesheet">
+    </head>
+
+    <body id="page-landing">
+        <div id="container">
+            <div class="logo-container">
+                <img src=" {% static '/images/logo.svg' %}  " alt="Proffy">
+                <h2>Conectando Alunos e Professores</h2>
+            </div>
+
+            <img class="hero-image" src="{% static '/images/landing.svg' %}" alt="Plataforma de Estudos">
+
+
+            <div class="buttons-container">
+                <a class="study" href="{% url 'study' %}">
+                    <img src="{% static 'images//icons/study.svg' %}/" alt="Estudar">
+                Estudar
+                </a>
+
+                <a class="give-classes" href="{% url 'give-classes' %}">
+                    <img src="{% static '/images//icons/give-classes.svg' %}" alt="Dar Aulas">
+                Dar Aulas
+                </a>
+            </div>
+            
+  <!--          <p class="total-conexions">
+                Total de 200 Conexões Já Realizadas
+                <img src="{% static '/images/icons/purple-heart.svg' %}" alt="Coração Roxo">
+            </p> -->
+        </div> 
+
+        
+    </body>
+</html> 

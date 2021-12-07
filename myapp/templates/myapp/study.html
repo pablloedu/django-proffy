@@ -1,0 +1,122 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt_br">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="theme-color" content=#8257E5>
+        <title>Proffy | Encontre Professoress</title>
+        <link rel="shortcut icon" href="{% static '/images/favicon.png' %}" type="image/png">
+        <link rel="stylesheet" href="{% static '/styles/main.css' %}" >
+        <link rel="stylesheet" href="{% static '/styles/partials/header.css' %}">
+        <link rel="stylesheet" href="{% static '/styles/partials/page-study.css' %}">
+        <link rel="stylesheet" href="{% static '/styles/partials/form.css' %}">
+        <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700&amp;family=Poppins:wght@400;600&amp;display=swap" rel="stylesheet">
+    </head>
+
+    <body id="page-study">
+        <div id="container">
+            <header class="page-header"> 
+
+                <div class="top-bar-container">
+                    <a href="/" ><img src="{% static '/images/icons/back.svg' %}" alt="Voltar"></a>
+                    <img src="{% static '/images/logo.svg' %}" alt="Proffy">
+                </div>
+
+                <div class="header-content">
+                    <strong>Estes são os Proffys Disponiveis</strong>
+
+                    <form action="{% url 'studyFilter' %}" method='GET' id="search-teachers">
+
+                        <div class="select-block"> <!-- Bloco Subject-->
+                            <label for="subject">Matéria</label>
+                            <select name="subject" id="subject">
+                                <option value="{{ request.GET.subject }}" hidden="">
+                                    {% if request.GET.subject %}
+                                        {{ request.GET.subject }}
+                                    {%endif%}
+                                </option>
+                                        {% for subject in subjects %}
+                                            <option>
+                                                {{subject}}
+                                            </option>
+                                        {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="select-block"> <!-- Bloco Weekday-->
+                            <label for="weekday">Dia da Semana</label>
+                            <select name="weekday" id="weekday">
+                                <option value="" hidden="">
+                                    {% if request.GET.weekday %}
+                                        {{ request.GET.weekday }}
+                                
+                                    {%endif%}
+                                </option >
+                                {% for weekday in weekdays %}
+                                    <option>
+                                        {{weekday}}
+                                    </option>
+                                {% endfor %}                            
+                            </select>
+                        </div> 
+
+                        <div class="select-block"> <!-- Bloco estado-->
+                            <label for="estado">Estado</label>
+                            <select name="estado" required>
+                                <option value="{{ request.GET.estado }}" hidden="">
+                                    {% if request.GET.estado %}
+                                        {{ request.GET.estado }}
+                                    {%endif%}
+                                </option>
+                                {% for estado in dados %}
+                                    <option >                                   
+                                        {{estado.nome}}
+                                    </option>
+                                {%endfor%}
+                            </select>
+                        </div> 
+
+                        <button type="submit">Filtrar </button>
+                    </form>
+                </div>
+            </header> 
+
+            <main>  
+                {% if not proffys %} 
+                    <p class="no-results">Nenhum professor encontrado com a sua pesquisa. </p>
+                {% else %}
+                    {% for proffy in proffys %}
+
+                        <article class="teacher-item">
+                            <header>
+                                <img src="{{proffy.avatar}}" alt="{{proffy.fullName}}">
+                                <div>
+                                    <strong>{{proffy.fullName}}</strong>
+                                    {{proffy.cidade}}-{{proffy.estado}}
+
+                                    <span>{{proffy.subject}}</span>
+
+                                </div>
+                            </header>
+                        
+                            <p>{{proffy.bio}}</p>
+                            <p>Disponibilidade: {{proffy.time_from}}h</p>
+                        
+                            <footer>
+                                <p>Preço/hora:<strong>R$ {{proffy.cost}},00</strong></p>
+                                <a href="https://api.whatsapp.com/send?1=pt_BR&phone=55{{proffy.whatsapp}}&text={{proffy.fullName}}, tenho interesse na sua aula de {{proffy.subject}}." class="button" target="_blank">
+                                    <img src="{% static '/images/icons/whatsapp.svg' %}" alt="Whatsapp">Entrar em contato
+                                </a>
+                            </footer>
+                        </article>
+
+                    {% endfor %}                        
+                {% endif %}
+
+            </main>
+        </div> 
+    </body>
+</html> 

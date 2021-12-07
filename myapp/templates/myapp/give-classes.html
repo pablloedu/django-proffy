@@ -1,0 +1,196 @@
+{% load static %}
+<!DOCTYPE html>
+
+<html lang="pt_br">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="theme-color" content=#8257E5>
+        <title>Proffy | Encontre Professoress</title>
+        <link rel="shortcut icon" href="{% static '/images/favicon.png' %}" type="image/png">
+
+        <link rel="stylesheet" href="{% static '/styles/main.css' %}" >
+        <link rel="stylesheet" href="{% static '/styles/partials/header.css' %}">
+        <link rel="stylesheet" href="{% static '/styles/partials/page-give-classes.css' %}">
+        <link rel="stylesheet" href="{% static '/styles/partials/form.css' %}">
+
+
+        <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700&amp;family=Poppins:wght@400;600&amp;display=swap" rel="stylesheet">
+
+
+    </head>
+
+    <body id="page-give-classes">
+        <div id="container">
+            <header class="page-header"> 
+                <div class="top-bar-container">
+                    <a href="/" ><img src="{% static '/images/icons/back.svg' %}" alt="Voltar"></a>
+                    <img src="{% static '/images/logo.svg' %}" alt="Proffy">
+                </div>
+
+                <div class="header-content">
+                    <strong>Que incrível que você quer dar aulas</strong>
+                    <p>O primeiro passo é preencher esse formulário</p>
+                </div>
+            </header> 
+
+            <main>
+                <fieldset>
+                    <legend>Seus dados</legend>      <!-- Toda TAG fildset precisa ter a TAG legend (É o nome dese agrsupamentos de dados)-->
+
+                    <div class="select-block" id="schedule-items">
+                        <form action="/give-classes/" id="schedule-item" method="GET">
+                            <div class="select-block">
+                                <label for="estado">Estado</label>
+                                <select name="estado" onchange="this.form.submit()" required>
+                                    <option>
+                                        {% if not request.GET.estado %}
+                                            Selecione um Estado
+                                        {%else%}
+                                            {{ request.GET.estado }}
+                                        {%endif%}
+                                    </option>
+                                    {% for estado in dados %}
+                                        <option >                                   
+                                            {{estado.nome}}
+                                        </option>
+                                    {%endfor%}
+                                </select>
+
+                                {% if request.GET.estado %}
+                                    <label for="cidade">Cidade</label>
+                                        <select name="cidade" onchange="this.form.submit()" required>
+                                            <option>
+                                                {% if not request.GET.cidade %}
+                                                    Selecione uma Cidade
+                                                {%else%}
+                                                    {{ request.GET.cidade }}
+                                                {%endif%}
+                                            </option>
+
+                                        {%for dic in dados %}
+                                            {% if dic.nome == request.GET.estado %}
+                                            
+                                                {% for city in dic.cidades %}      
+                                                    <option>
+                                                        {{city}}
+                                                    </option>
+                                                {%endfor%}
+                                            {% endif %}
+                                        {%endfor%}
+                                        
+                                        </select>
+                                {% endif %}
+
+                        </form>
+                    </div>
+
+
+                <form action="/give-classes/" id="create-class" method="POST">
+                    {% csrf_token %}
+                                               <!-- Serve para fazer agrupamentos de dados-->                        
+                        
+                        <div class="input-block">
+                            <label for="name">Nome completo</label>
+                            <input name="fullName" id="fullName" required>                        
+                        </div>
+
+
+                        <div class="input-block">
+                            <label for="avatar">Link da sua foto <small>(comece com https://)</small></label>
+                            <input name="avatar" id="avatar" type="url" required>
+                        </div>
+
+
+                        <div class="input-block">
+                            <label for="whatsapp">Whatsapp <small>(Somente números)</small></label>
+                            <input name="whatsapp" id="whatsapp" type="number" required>                         
+                        </div>
+
+                        <div class="input-block">
+                            <label for="email">Email <small>(Digite um Email Válido)</small></label>
+                            <input name="email" id="email" required>                         
+                        </div>
+
+
+
+                        <div class="textarea-block">
+                            <label for="bio">Biografia</label>
+                            <textarea name="bio" id="bio"required></textarea>    
+                        </div>                            
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>Sobre a aula</legend>
+                        <div class="select-block">
+                                <label for="subject">Matéria</label>
+                                <select name="subject" id="subject" required>
+                                    <option value="">Selecione uma opção</option>
+                                        {% for subject in subjects %}
+                                            <option>
+                                                {{subject}}
+                                            </option>
+                                        {% endfor %}
+                                    
+                                </select>
+                        </div>
+
+                        
+
+                        <div class="input-block">
+                            <label for="cost">Custo da sua hora/aula <small>(R$)</small> </label>
+                            <input type="number" name="cost" id="cost" required>
+                        </div>
+                    </fieldset>    
+                    
+                    <fieldset id="schedule-items">
+                        <legend>Horários disponiveis
+                        
+                        </legend>
+
+                        <div class="schedule-item">
+                            <div class="select-block">
+                                <label for="weekday">Dia da semana</label>
+                                <select name="weekday">
+                                    <option value="">Selecione uma opção</option>
+                                    {% for weekday in weekdays %}
+                                        <option>                                   
+                                            {{weekday}}
+                                        </option>
+                                    {%endfor%}
+                                </select>
+                            </div>
+
+
+                            <div class="input-block">
+                                <label for="time_from">Disponivel às:</label>
+                                <input type="time" name="time_from" required>
+                            </div>
+
+ 
+                        </div>
+
+                    </fieldset>
+
+                            <input type="hidden" name="estado" value="{{ request.GET.estado }}"></input>
+                            <input type="hidden" name="cidade" value="{{ request.GET.cidade }}"></input>
+
+                </form>
+
+
+                <footer>
+                    <p>
+                        <img src="{% static '/images/icons/warning.svg' %}" alt="Aviso Importante"> Importante! <br> 
+                        Preencha todos os Dados
+                    </p>
+                    <button type="submit" form="create-class"> Salvar Cadastro</button>
+                </footer>
+
+
+
+            </main>
+        </div>        
+    </body>
+</html>
